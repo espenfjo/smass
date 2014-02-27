@@ -1,0 +1,4 @@
+database=mongodb
+mongo_host=127.0.0.1
+modules=pe, virustotal
+virustotal_api_key=<apikey>

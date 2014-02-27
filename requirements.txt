@@ -1,0 +1,6 @@
+configobj
+python-magic
+-s
+pefile
+urllib3
+crypto

@@ -1,0 +1,30 @@
+{% extends "layouts/full.html" %}
+{% block content %}
+<div class="row">
+  <ul class="nav nav-tabs" id="modules">
+    <li class="active"><a href="#tab-overview" data-toggle="tab">Quick overview</a></li>
+    {% for module in analysis.modules %}
+      <li><a href="#tab-{{ module.name }}" data-toggle="tab">{{ module.name }}</a></li>
+    {% endfor %}
+    <li><a href="#tab-relationships" data-toggle="tab">Relationships</a></li>
+  </ul>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab-overview">
+      {% include "analysis/module/overview.html" %}
+    </div>
+    {% for module in analysis.modules %}
+    {% with "analysis/module/"|add:module.name|add:".html" as template %}
+    <div class="tab-pane" id="tab-{{ module.name }}">
+      <div class="tab-content">
+        {% include template %}
+      </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+    <div class="tab-pane" id="tab-relationships">
+      {% include "analysis/module/relationships.html" %}
+    </div>    
+  </div>
+</div>
+{% endblock %}

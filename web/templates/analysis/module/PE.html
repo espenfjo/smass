@@ -1,0 +1,119 @@
+<h4>File information</h4>
+<table class="table table-striped table-bordered table-hover">
+  <tbody>
+    <tr>
+      <th>File magic</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Compile time</th>
+      <td>{{ module.compile_time }}</td>
+    </tr>
+    <tr>
+      <th>Machine type</th>
+      <td>{{ module.machine }}</td>
+    </tr>
+    <tr>
+      <th>Entry point</th>
+      <td>{{ module.entrypoint }}</td>
+    </tr>
+    <tr>
+      <th>Imphash</th>
+      <td>{{ module.imphash }}</td>
+    </tr>
+    <tr>
+      <th>Results</th>
+      <td>{{module.positives}}/{{module.total}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5>PE Sections</h5>
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <th>Name</th>
+    <th>Virtual address</th>
+    <th>Virtual size</th>
+    <th>Raw size</th>
+    <th>Entropy</th>
+    <th>MD5</th>
+  </thead>
+  <tbody>
+    {% for section in module.sections %}
+    <tr>
+      <td>{{ section.name }}</td>
+      <td>{{ section.virtual_address }}</td>
+      <td>{{ section.virtual_size }}</td>
+      <td>{{ section.raw_size }}</td>
+      <td>{{ section.entropy }}</td>
+      <td>{{ section.md5 }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h5>SUB Resources</h5>
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <th>Name</th>
+    <th>Language</th>
+    <th>File type</th>
+    <th>Sub language</th>
+    <th>Offset</th>
+    <th>MD5</th>
+    <th>Size</th>
+  </thead>
+  <tbody>
+    {% for sub_resource in module.sub %}
+    <tr>
+      <td>{{ sub_resource.name }}</td>
+      <td>{{ sub_resource.language }}</td>
+      <td>{{ sub_resource.filetype }}</td>
+      <td>{{ sub_resource.sublanguage }}</td>
+      <td>{{ sub_resource.offset }}</td>
+      <td>{{ sub_resource.md5 }}</td>
+      <td>{{ sub_resource.size }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<div class="well">
+  <h5>PE Imports</h5>
+  <div id="pe-imports">
+    {% for import in module.imports %}
+    <div class="import">
+      <a class="pe-toggler active" data-parent="#pe-imports" href="#" data-toggle="collapse" data-target="#{{import.jquery_proof_name}}">
+        {{ import.name }}
+      </a>      
+      <div id="{{import.jquery_proof_name}}" class="collapse">
+         {% for resource in import.imports %}
+         <div class="pe-port-resource">
+           {{ resource.name }}
+         </div>
+         {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="well">
+  <h5>PE Exports</h5>
+  <div id="pe-exports">
+    {% for export in module.exports %}
+    <div class="export">
+      <a class="pe-toggler active" data-parent="#pe-exports" href="#" data-toggle="collapse" data-target="#{{export.jquery_proof_name}}">
+        {{ import.name }}
+      </a>      
+      <div id="{{import.jquery_proof_name}}" class="collapse">
+         {% for resource in import.imports %}
+         <div class="pe-export-resource">
+           {{ resource.name }}
+         </div>
+         {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

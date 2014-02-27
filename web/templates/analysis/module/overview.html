@@ -1,0 +1,52 @@
+<table class="table table-striped table-bordered table-hover">
+  <tbody>
+    <tr>
+      <th>Artifact name</th>
+      <td>{{ analysis.name }}</td>
+    </tr>
+    <tr>
+      <th>Analysis date</th>
+      <td>{{ analysis.analysis_date }}</td>
+    </tr>
+    <tr>
+      <th>File type</th>
+      <td>{{ analysis.file_type }}</td>
+    </tr>
+    <tr>
+      <th>Tags</th>
+      <td>
+        {% for tag in analysis.meta.tags %}
+        <span class="label label-primary">{{ tag }}</span>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <th>Source</th>
+      <td>{{ analysis.meta.source }}</td>
+    </tr>
+    <tr>
+      <th>Comment</th>
+      <td>{{ analysis.meta.comment }}</td>
+    </tr>
+    <tr>
+      <th>MD5</th>
+      <td>{{ analysis.md5 }}</td>
+    </tr>
+    <tr>
+      <th>SHA1</th>
+      <td>{{ analysis.sha1 }}</td>
+    </tr>
+    <tr>
+      <th>SHA256</th>
+      <td>{{ analysis.sha256 }}</td>
+    </tr>
+    <tr>
+      <th>SHA512</th>
+      <td>{{ analysis.sha512 }}</td>
+    </tr>
+    <tr>
+      <th>SSDEEP</th>
+      <td>{{ analysis.ssdeep }}</td>
+    </tr>
+  </tbody>
+</table>

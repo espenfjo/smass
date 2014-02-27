@@ -1,0 +1,38 @@
+<h4>Relationships</h4>
+<h5>Duplicate MD5: {{ analysis.md5 }}</h5>
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+    <th>Name</th>
+    <th>Analysis date</th>
+  </thead>
+  <tbody>
+    {% for rel in relationships %}
+    <tr>
+      <td><a href="/analysis/{{ rel.id}}">{{rel.name}}</a></td>
+      <td>{{rel.analysis_date}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h5>Duplicate Sub resources</h5>
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+    <th>Name</th>
+    <th>MD5</th>
+    <th>Seen in</th>
+  </thead>
+  <tbody>
+    {% for sub in sub_relations %}
+    <tr>
+      <td>{{sub.data.name}}</td>
+      <td>{{sub.data.md5}}</td>
+      <td>
+        {% for aid,analysis_name in sub.aid.items %}
+        <a href="/analysis/{{ aid }}">{{ analysis_name }}</a>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

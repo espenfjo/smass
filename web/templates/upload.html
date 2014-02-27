@@ -1,0 +1,31 @@
+{% extends "layouts/full.html" %}
+{% block content %}
+<div class="row">
+  <form role="form" class="form cf" action="/submit" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="file">File</label>
+    <div class="input-group col-md-6">
+      <span class="input-group-btn">
+        <input type="text" class="form-control" readonly="">
+        <span class="btn btn-primary btn-file">
+          Select <input type="file" name="file" id="id_file">
+        </span>        
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="tags">Tags</label>
+      <select multiple data-role="tagsinput" id="tags" name="tags" style="display:none"></select>
+      
+      <label for="source">Source</label>
+      <input id="source" class="form-control" name="source">
+    </div>
+    <div class="form-group">
+      <label for="comments">Comments</label>
+      <textarea name="comments" class="form-control" rows="3"></textarea>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+<table class="table table-striped table-bordered table-hover">
+  <tbody>
+    <tr>
+      <th>Scan ID</th>
+      <td>{{ module.scan_id }}</td>
+    </tr>
+    <tr>
+      <th>Scan date</th>
+      <td>{{ module.scan_date }}</td>
+    </tr>
+    <tr>
+      <th>URL</th>
+      <td><a href="{{ module.permalink }}">https://www.virustotal.com/</a></td>
+    </tr>
+    <tr>
+      <th>Results</th>
+      <td>{{module.positives}}/{{module.total}}</td>
+    </tr>
+  </tbody>
+</table>
+<table class="table table-striped table-bordered table-hover">
+  <tbody>
+    <tr>
+      <th>Antivirus</th>
+      <th>Signature</th>
+    </tr>
+    {% for av,result in module.scans.items %}
+      {% if result.detected %}
+    <tr class="danger">
+      {% else %}
+    <tr class="success">
+      {% endif %}      
+      <th>{{ av }}</th>
+      <td>{{result.result}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
