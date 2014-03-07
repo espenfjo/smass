@@ -12,10 +12,11 @@ from lib.Artifact import Artifact
 def read_config():
     configfile = "ass.conf"
     parser = argparse.ArgumentParser()
-    description='Arguments to start FjoSpidie'
+    description='Arguments to start ASS'
 
+    
     parser.add_argument('--configfile', type=str, nargs=1,
-                        help='FjoSpidie configuration file')
+                        help='ASS configuration file')
     args, remaining_argv = parser.parse_known_args()
     parser.add_argument("-v", "--verbose", help="increase output verbosity",
                     action="store_true")
