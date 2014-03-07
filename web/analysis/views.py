@@ -19,7 +19,7 @@ class AnalysisDetailView(DetailView):
     model = Analysis
     def get_context_data(self, **kwargs):
         context = super(AnalysisDetailView, self).get_context_data(**kwargs)
-        context['relationships'] = Analysis.objects.filter(md5=context['analysis'].md5)
+        context['relationships'] = Analysis.objects.filter(md5=context['analysis'].md5).exclude(md5=context['analysis'].md5)
         for module in context['analysis'].modules:
             if isinstance(module, PE):
                 context['sub_relations'] = find_sub_pe_relations(module)
