@@ -14,9 +14,11 @@ class Artifact(object):
         self.data = data
         self.database = classloader("database", self.config.database, self)
         self.magic = classloader("modules", "filemagic", self)
-        self.set_type()
-        print self.config.modules
-        print type(self.config.modules)
+        if "type" in self.config:
+            self.type = self.config.type
+        else:
+            self.set_type()
+
         self.modules = []
         if "modules" in self.config:
             for module in list(self.config.modules):
@@ -26,6 +28,8 @@ class Artifact(object):
     def set_type(self):
         if re.match("PE", str(self.magic.magic)):
             self.type = "pe"
+        if re.match("(Node.js|javascript)", str(self.magic.magic)):
+            self.type = "javascript"
 
     def analyse(self):
         self.report = {}

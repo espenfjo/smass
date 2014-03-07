@@ -18,6 +18,8 @@ def read_config():
     parser.add_argument('--configfile', type=str, nargs=1,
                         help='ASS configuration file')
     args, remaining_argv = parser.parse_known_args()
+    parser.add_argument('--type', type=str, nargs=1,
+                        help='Select type of file')
     parser.add_argument("-v", "--verbose", help="increase output verbosity",
                     action="store_true")
     parser.add_argument("-d", "--debug", help="Debug output",
