@@ -1,13 +1,15 @@
 import sys
 import argparse
 
-from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
-from django.views.generic.detail import DetailView
-from .forms import UploadFileForm
 from django.conf import settings
+from django.http import HttpResponse,HttpResponseRedirect
+from django.shortcuts import render, render_to_response
+from django.views.decorators.http import require_safe
+from django.views.generic.detail import DetailView
+from django.template import RequestContext
 
 from analysis.models import Analysis,PE,PE_Sub
+from .forms import UploadFileForm
 
 sys.path.append(settings.ASS_PATH)
 from lib.Artifact import Artifact
@@ -43,6 +45,71 @@ def find_sub_pe_relations(pe):
                         matches[match_sub.md5]["data"] = match_sub
 
     return matches.values()
+
+
+def search(request):
+    records = []
+    if "search" in request.POST:
+        error = None
+
+        try:
+            term, value = request.POST["search"].strip().split(":", 1)
+        except ValueError:
+            term = ""
+            value = request.POST["search"].strip()
+
+            # Check on search size.
+        if len(value) < 3:
+            return render_to_response("search.html",
+                                      {"analyses": None,
+                                       "term": request.POST["search"],
+                                       "error": "Search term too short, minimum 3 characters required"},
+                                      context_instance=RequestContext(request))
+
+        value = value.strip()
+        if term:
+            if term == "name":
+                records = Analysis.objects.raw_query({"name": {"$regex": value, "$options": "-i"}})
+            elif term == "source":
+                records = Analysis.objects.raw_query({"meta.source": {"$regex": value, "$options": "-i"}})
+            elif term == "tag":
+                records = Analysis.objects.raw_query({"meta.tags": {"$regex": value, "$options": "-i"}})
+            elif term == "comment":
+                records = Analysis.objects.raw_query({"meta.comment": {"$regex": value, "$options": "-i"}})
+            elif term == "type":
+                records = Analysis.objects.raw_query({"type": {"$regex": value, "$options": "-i"}})
+
+
+
+        else:
+            if re.match(r"^([a-fA-F\d]{32})$", value):
+                records = Analysis.objects.raw_query({"md5": value})
+            elif re.match(r"^([a-fA-F\d]{40})$", value):
+                records = Analysis.objects.raw_query({"sha1": value})
+            elif re.match(r"^([a-fA-F\d]{64})$", value):
+                records = Analysis.objects.raw_query({"sha256": value})
+            elif re.match(r"^([a-fA-F\d]{128})$", value):
+                records = Analysis.objects.raw_query({"sha512": value})
+            else:
+                return render_to_response("search.html",
+                                          {"analyses": None,
+                                           "term": None,
+                                           "error": "Unable to recognize the search syntax"},
+                                          context_instance=RequestContext(request))
+
+        return render_to_response("search.html",
+                                  {"analyses": records,
+                                   "term": request.POST["search"],
+                                   "error": None},
+                                  context_instance=RequestContext(request))
+    else:
+        return render_to_response("search.html",
+                                  {"analyses": None,
+                                   "term": None,
+                                   "error": None},
+                                  context_instance=RequestContext(request))
+
+
 
 def submit(request):
     if request.method == 'POST':

@@ -4,7 +4,6 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-tagsinput.css' %}">
     <link rel="stylesheet" href="{% static 'css/ass.css' %}">
@@ -25,6 +24,7 @@
             <ul class="nav navbar-nav">
               <li class="active"><a href="/">Analysis</a></li>
               <li><a href="/submit">Submit</a></li>
+              <li><a href="/search">Search</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/about">About</a></li>
@@ -43,8 +43,6 @@
       </div>
     </div>
     <script src="{% static 'js/jquery-1.9.1.js' %}"></script>
-    <script src="{% static 'js/jquery.blockUI.js' %}"></script>
-    <script src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.file-input.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap-tagsinput.js' %}"></script>

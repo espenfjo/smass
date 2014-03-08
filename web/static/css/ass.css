@@ -88,6 +88,9 @@ input[readonly] {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
+body > div.container > div > form.search {
+    width: 500px;
+}
 
 
 .right-caret {
