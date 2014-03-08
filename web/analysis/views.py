@@ -146,7 +146,8 @@ def submit_file(stuff, post):
     config.mongo_host = configobj['mongo_host']
     config.virustotal_api_key = configobj['virustotal_api_key']
 
-    config.type = post.get('type')
+    if post.get('type') and post.get('type') != "":
+        config.type = post.get('type')
 
     artifact = Artifact( config, name, size, data)
     artifact.analyse()
