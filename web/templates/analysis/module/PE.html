@@ -3,7 +3,7 @@
   <tbody>
     <tr>
       <th>File magic</th>
-      <td></td>
+      <td>{{ analysis.file_type }}</td>
     </tr>
     <tr>
       <th>Compile time</th>
@@ -13,6 +13,14 @@
       <th>Machine type</th>
       <td>{{ module.machine }}</td>
     </tr>
+    <tr>
+      <th>Subsystem</th>
+      <td>{{ module.subsystem }}</td>
+    </tr>
+    <tr>
+      <th>DLL</th>
+      <td>{{ module.is_dll }}</td>
+    </tr>    
     <tr>
       <th>Entry point</th>
       <td>{{ module.entrypoint }}</td>

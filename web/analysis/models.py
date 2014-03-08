@@ -35,7 +35,9 @@ class PE(models.Model):
     exports = ListField(EmbeddedModelField('PE_Ports'))
     sections = ListField()
     machine = models.TextField()
-    entrypoint = models.IntegerField()
+    entrypoint = models.TextField()
+    is_dll = models.BooleanField(default=False)
+    subsystem = models.TextField()
     sub = ListField(EmbeddedModelField('PE_Sub'))
 
 class PE_Sub(models.Model):

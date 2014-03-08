@@ -29,10 +29,11 @@ class pe(object):
         self.resources()
         self.imphash()
         self.machine()
-        self.data['section_numbers'] = self.pe.FILE_HEADER.NumberOfSections
         self.sections()
-        self.data['entrypoint'] = self.pe.OPTIONAL_HEADER.AddressOfEntryPoint
-
+        self.data['section_numbers'] = self.pe.FILE_HEADER.NumberOfSections
+        self.data['entrypoint'] = hex(self.pe.OPTIONAL_HEADER.AddressOfEntryPoint)
+        self.data['subsystem'] = pefile.SUBSYSTEM_TYPE[self.pe.OPTIONAL_HEADER.Subsystem]
+        self.data['is_dll'] = self.pe.FILE_HEADER.IMAGE_FILE_DLL
 
     def sections(self):
         sections = []
