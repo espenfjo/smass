@@ -2,7 +2,7 @@ import sys
 import argparse
 
 from django.conf import settings
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest
 from django.shortcuts import render, render_to_response
 from django.views.decorators.http import require_safe
 from django.views.generic.detail import DetailView
@@ -19,6 +19,7 @@ from lib.configreader import parse_config
 
 class AnalysisDetailView(DetailView):
     model = Analysis
+
     def get_context_data(self, **kwargs):
         context = super(AnalysisDetailView, self).get_context_data(**kwargs)
         context['relationships'] = Analysis.objects.filter(md5=context['analysis'].md5).exclude(id=context['analysis'].id)
@@ -27,7 +28,9 @@ class AnalysisDetailView(DetailView):
                 context['sub_relations'] = find_sub_pe_relations(module)
 
         return context
-
+    def post(self, request, *args, **kwargs):
+        analysis = self.model.objects.get(id=kwargs['pk'])
+        return update(request, analysis, kwargs['pk'])
 
 def find_sub_pe_relations(pe):
     matches = {}
@@ -46,6 +49,26 @@ def find_sub_pe_relations(pe):
 
     return matches.values()
 
+
+def update(request, analysis, i_d):
+    value = None
+    if request.method == 'POST':
+        value = request.POST.get("value")
+        if request.POST.get("name") == "empty-tag":
+            try:
+                analysis.meta.tags.extend([value])
+            except Exception, e:
+                print e
+                return HttpResponseBadRequest()
+        else:
+            try:
+                setattr(analysis.meta, request.POST.get("name"), value)
+            except Exception, e:
+                print e
+                return HttpResponseBadRequest()
+        analysis.save()
+
+    return HttpResponse()
 
 def search(request):
     records = []

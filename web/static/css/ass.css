@@ -127,3 +127,7 @@ body > div.container > div > form.search {
 .pe-port-resource {
     margin-left: 20px;
 }
+.editable a{
+    pointer-events:none;
+    
+}

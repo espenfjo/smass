@@ -14,19 +14,23 @@
     </tr>
     <tr>
       <th>Tags</th>
-      <td>
+      <td class="tag-list">
         {% for tag in analysis.meta.tags %}
-        <span class="label label-primary">{{ tag }}</span>
+        <a href="#" data-type="text" data-pk="1" data-title="Enter tag" class="editable editable-click tags" tabindex="-1"><span class="label label-primary">{{ tag }}</span></a>
         {% endfor %}
       </td>
     </tr>
     <tr>
       <th>Source</th>
-      <td>{{ analysis.meta.source }}</td>
+      <td>
+        <a href="#" id="source" data-type="text" data-pk="1" data-title="Enter source" class="editable editable-click" tabindex="-1">{{ analysis.meta.source }}</a>
+      </td>
     </tr>
     <tr>
       <th>Comment</th>
-      <td>{{ analysis.meta.comment }}</td>
+      <td>
+        <a href="#" id="comment" data-type="textarea" data-pk="1" data-title="Enter comment" class="editable editable-click" tabindex="-1">{{ analysis.meta.comment }}</a>
+      </td>
     </tr>
     <tr>
       <th>MD5</th>
@@ -48,5 +52,9 @@
       <th>SSDEEP</th>
       <td>{{ analysis.ssdeep }}</td>
     </tr>
+    <tr>
+      <td colspan="2">
+        <button id="enable" class="btn btn-default">Edit</button>
+      </td>
   </tbody>
 </table>
