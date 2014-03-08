@@ -27,6 +27,10 @@ class Meta(models.Model):
     comment = models.TextField()
     source = models.URLField()
 
+class JavaScript(models.Model):
+    name = models.TextField()
+
+
 class PE(models.Model):
     name = models.TextField()
     compile_time = models.DateField()
