@@ -4,3 +4,4 @@ python-magic
 pefile
 urllib3
 crypto
+numpy
