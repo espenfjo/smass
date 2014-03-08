@@ -21,7 +21,7 @@ class AnalysisDetailView(DetailView):
     model = Analysis
     def get_context_data(self, **kwargs):
         context = super(AnalysisDetailView, self).get_context_data(**kwargs)
-        context['relationships'] = Analysis.objects.filter(md5=context['analysis'].md5).exclude(md5=context['analysis'].md5)
+        context['relationships'] = Analysis.objects.filter(md5=context['analysis'].md5).exclude(id=context['analysis'].id)
         for module in context['analysis'].modules:
             if isinstance(module, PE):
                 context['sub_relations'] = find_sub_pe_relations(module)
@@ -146,14 +146,15 @@ def submit_file(stuff, post):
     config.mongo_host = configobj['mongo_host']
     config.virustotal_api_key = configobj['virustotal_api_key']
 
+    config.type = post.get('type')
+
     artifact = Artifact( config, name, size, data)
     artifact.analyse()
 
     meta = {
         'source': post.get('source'),
-        'tags': [post.get('tags'),],
+        'tags': post.getlist('tags'),
         'comment': post.get('comments'),
-
         }
     artifact.report['meta'] = meta
     artifact.database.collection.insert(artifact.report)
