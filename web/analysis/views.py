@@ -1,6 +1,8 @@
 import sys
 import argparse
 
+from bson.objectid import ObjectId
+
 from django.conf import settings
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest
 from django.shortcuts import render, render_to_response
@@ -25,18 +27,18 @@ class AnalysisDetailView(DetailView):
         context['relationships'] = Analysis.objects.filter(md5=context['analysis'].md5).exclude(id=context['analysis'].id)
         for module in context['analysis'].modules:
             if isinstance(module, PE):
-                context['sub_relations'] = find_sub_pe_relations(module)
+                context['sub_relations'] = find_sub_pe_relations(module, context['analysis'].id)
 
         return context
     def post(self, request, *args, **kwargs):
         analysis = self.model.objects.get(id=kwargs['pk'])
         return update(request, analysis, kwargs['pk'])
 
-def find_sub_pe_relations(pe):
+def find_sub_pe_relations(pe, id):
     matches = {}
     for sub in pe.sub:
         md5 = sub.md5
-        for match in Analysis.objects.raw_query({"modules.sub.md5":md5}):
+        for match in Analysis.objects.raw_query({ "$and": [{"modules.sub.md5": md5 }, {"_id": {"$ne": ObjectId(id)}}]}):
             for module in match.modules:
                 if isinstance(module, PE):
                     for match_sub in module.sub:
