@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import gridfs
 
 class mongodb(object):
     def __init__(self, artifact):
@@ -7,3 +8,4 @@ class mongodb(object):
         client = MongoClient(self.config.mongo_host)
         db = client.ass
         self.collection = db.ass
+        self.fs = gridfs.GridFS(db)

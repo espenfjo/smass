@@ -80,8 +80,11 @@ function setupListeners() {
         event.preventDefault();
     });
 
-    $(".tags").on('save', function(e, params) {
-
+    $(".download-artifact").on("click", function(){
+        var id = $(this).attr('id');
+        console.info(id);
+        $(this).attr({target: '_blank',
+                            href  : '/download/' + id });
     });
 
     $('#enable').click(function() {

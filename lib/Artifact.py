@@ -17,6 +17,8 @@ class Artifact(object):
         if "type" in self.config:
             if self.config.type:
                 self.type = self.config.type
+            else:
+                self.set_type()
         else:
             self.set_type()
 
@@ -42,11 +44,19 @@ class Artifact(object):
         self.report["file_size"] = self.size
         self.report["analysis_date"] = datetime.now()
         self.report["modules"] = []
+        self.store_file()
         for module in self.modules:
             if module.type in self.type or module.type is "generic":
                 module.init()
                 self.report['modules'].append(module.data)
 
+
+    def store_file(self):
+        if not self.database.fs.exists({"md5":self.report['md5']}):
+            self.report["fs_id"] = self.database.fs.put(self.data)
+        else:
+            grid_file = self.database.fs.get_version(md5=self.report['md5'])
+            self.report["fs_id"] = grid_file._id
 
     def get_hashes(self):
         hashes = Hash(self)

@@ -1,17 +1,22 @@
-import sys
 import argparse
+import gridfs
+import sys
 
 from bson.objectid import ObjectId
 
 from django.conf import settings
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest,Http404
 from django.shortcuts import render, render_to_response
 from django.views.decorators.http import require_safe
 from django.views.generic.detail import DetailView
 from django.template import RequestContext
+from django.db import connections
 
-from analysis.models import Analysis,PE,PE_Sub
+
 from .forms import UploadFileForm
+from analysis.models import Analysis,PE,PE_Sub
+
+
 
 sys.path.append(settings.ASS_PATH)
 from lib.Artifact import Artifact
@@ -50,6 +55,19 @@ def find_sub_pe_relations(pe, id):
                         matches[match_sub.md5]["data"] = match_sub
 
     return matches.values()
+
+def download(request, pk):
+    try:
+        db = connections['default']
+        fs = gridfs.GridFS(db.database)
+        if fs.exists(ObjectId(pk)):
+            gridfile = fs.get(ObjectId(pk))
+    except Exception, e:
+        return Http404
+    else:
+        response = HttpResponse(gridfile.read(), mimetype="application/octet-stream")
+        response['Content-Disposition'] = 'attachment; filename={}'.format(gridfile.md5)
+        return response
 
 
 def update(request, analysis, i_d):

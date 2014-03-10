@@ -6,11 +6,13 @@ import magic
 import os
 import pefile
 import re
+import tempfile
+import subprocess
 
 class pe(object):
     def __init__(self, artifact):
         self.type = "pe"
-        self.artifact = artifact.data
+        self.artifact = artifact
         self.data = {}
         self.data["name"] = "PE"
         self.data["_model"] = self.data["name"]
@@ -18,7 +20,7 @@ class pe(object):
 
     def init(self):
         try:
-            self.pe = pefile.PE(data=self.artifact)
+            self.pe = pefile.PE(data=self.artifact.data)
         except pefile.PEFormatError as e:
             logging.error("Unable to parse PE file: {0}".format(e))
             return
@@ -97,8 +99,15 @@ class pe(object):
                             if hasattr(resource_id, 'directory'):
                                 for resource_lang in resource_id.directory.entries:
                                     data = self.pe.get_data(resource_lang.data.struct.OffsetToData, resource_lang.data.struct.Size)
-                                    filetype = self.__get_filetype(data)
                                     md5 = self.__get_md5(data)
+                                    fs_id = ""
+                                    if not self.artifact.database.fs.exists({"md5":md5}):
+                                        fs_id = self.artifact.database.fs.put(data)
+                                    else:
+                                        grid_file = self.artifact.database.fs.get_version(md5=md5)
+                                        fs_id = grid_file._id
+                                    filetype = self.__get_filetype(data)
+
                                     language = pefile.LANG.get(resource_lang.data.lang, None)
                                     sublanguage = pefile.get_sublang_name_for_lang(resource_lang.data.lang, resource_lang.data.sublang)
                                     offset = ('%-8s' % hex(resource_lang.data.struct.OffsetToData)).strip()
@@ -111,7 +120,7 @@ class pe(object):
                                         "md5": md5,
                                         "language": language,
                                         "sublanguage": sublanguage,
-                                        #"data": base64.b64encode(data)
+                                        "fs_id": fs_id
                                     }
 
                                     resources.append(resource)

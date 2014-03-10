@@ -20,7 +20,7 @@
     <tr>
       <th>DLL</th>
       <td>{{ module.is_dll }}</td>
-    </tr>    
+    </tr>
     <tr>
       <th>Entry point</th>
       <td>{{ module.entrypoint }}</td>
@@ -70,6 +70,7 @@
     <th>Offset</th>
     <th>MD5</th>
     <th>Size</th>
+    <th>Download</th>
   </thead>
   <tbody>
     {% for sub_resource in module.sub %}
@@ -81,6 +82,11 @@
       <td>{{ sub_resource.offset }}</td>
       <td>{{ sub_resource.md5 }}</td>
       <td>{{ sub_resource.size }}</td>
+      <td>
+        <form method="get" action="/download/{{ sub_resource.fs_id }}">
+          <button class="btn btn-default btn-xs" id="{{ sub_resource.fs_id }}">Download</button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
@@ -94,7 +100,7 @@
     <div class="import">
       <a class="pe-toggler active" data-parent="#pe-imports" href="#" data-toggle="collapse" data-target="#{{import.jquery_proof_name}}">
         {{ import.name }}
-      </a>      
+      </a>
       <div id="{{import.jquery_proof_name}}" class="collapse">
          {% for resource in import.imports %}
          <div class="pe-port-resource">
@@ -113,7 +119,7 @@
     <div class="export">
       <a class="pe-toggler active" data-parent="#pe-exports" href="#" data-toggle="collapse" data-target="#{{export.jquery_proof_name}}">
         {{ import.name }}
-      </a>      
+      </a>
       <div id="{{import.jquery_proof_name}}" class="collapse">
          {% for resource in import.imports %}
          <div class="pe-export-resource">

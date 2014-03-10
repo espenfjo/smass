@@ -55,6 +55,12 @@
     <tr>
       <td colspan="2">
         <button id="enable" class="btn btn-default">Edit</button>
+        <span class="pull-right">
+          <form method="get" action="/download/{{ analysis.fs_id }}">
+            <button class="btn btn-default">Download</button>
+          </form>
+        </span>
       </td>
+    </tr>
   </tbody>
 </table>

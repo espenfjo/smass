@@ -1,4 +1,6 @@
 from django_mongodb_engine.contrib import MongoDBManager
+from django_mongodb_engine.storage import GridFSStorage
+
 from django.db import models
 from djangotoolbox.fields import EmbeddedModelField, ListField, DictField
 from datetime import datetime
@@ -14,7 +16,7 @@ class Analysis(models.Model):
     crc = models.TextField()
     file_type = models.TextField()
     analysis_date = models.DateField()
-
+    fs_id = models.TextField()
     meta = EmbeddedModelField('Meta')
     modules = ListField(EmbeddedModelField())
 
@@ -53,7 +55,7 @@ class PE_Sub(models.Model):
     md5 = models.TextField()
     size = models.TextField()
     objects = MongoDBManager()
-
+    fs_id = models.TextField()
 
 class PE_Ports(models.Model):
     name = models.TextField()
