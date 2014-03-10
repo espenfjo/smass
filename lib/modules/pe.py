@@ -211,10 +211,10 @@ class pe(object):
         exports = []
         if not self.pe:
             return
-
         if hasattr(self.pe, 'DIRECTORY_ENTRY_EXPORT'):
             for symbol in self.pe.DIRECTORY_ENTRY_EXPORT.symbols:
-                exports.append("{0}: {1} ({2})".format(hex(self.pe.OPTIONAL_HEADER.ImageBase + symbol.address), symbol.name, symbol.ordinal))
+                data = {"address":hex(self.pe.OPTIONAL_HEADER.ImageBase + symbol.address), "name":symbol.name, "ordinal": symbol.ordinal}
+                exports.append(data)
 
         self.data["exports"] = exports
 
