@@ -9,6 +9,18 @@
       <th>Compile time</th>
       <td>{{ module.compile_time }}</td>
     </tr>
+    {% for key,value in module.version_info.items %}
+    <tr>
+      <th>{{ key }}</th>
+      <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+    {% if module.signature %}
+    <tr>
+      <th>Valid certificate</th>
+      <td>{{ module.signature.valid }}</td>
+    </tr>
+    {% endif %}
     <tr>
       <th>Machine type</th>
       <td>{{ module.machine }}</td>

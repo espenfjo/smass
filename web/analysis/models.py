@@ -45,6 +45,8 @@ class PE(models.Model):
     is_dll = models.BooleanField(default=False)
     subsystem = models.TextField()
     sub = ListField(EmbeddedModelField('PE_Sub'))
+    version_info = DictField()
+    signature = DictField()
 
 class PE_Sub(models.Model):
     name = models.TextField()

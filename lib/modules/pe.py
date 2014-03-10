@@ -32,10 +32,66 @@ class pe(object):
         self.imphash()
         self.machine()
         self.sections()
+        self.signature()
+        self.get_version()
+        self.process_signature()
         self.data['section_numbers'] = self.pe.FILE_HEADER.NumberOfSections
         self.data['entrypoint'] = hex(self.pe.OPTIONAL_HEADER.AddressOfEntryPoint)
         self.data['subsystem'] = pefile.SUBSYSTEM_TYPE[self.pe.OPTIONAL_HEADER.Subsystem]
         self.data['is_dll'] = self.pe.FILE_HEADER.IMAGE_FILE_DLL
+
+    def get_version(self):
+        """ Determine the version info in a PE file """
+        self.data['version_info'] = {}
+        if hasattr(self.pe, 'VS_VERSIONINFO'):
+            if hasattr(self.pe, 'FileInfo'):
+                for entry in self.pe.FileInfo:
+                    if hasattr(entry, 'StringTable'):
+                        for st_entry in entry.StringTable:
+                            for str_entry in st_entry.entries.items():
+                                self.data['version_info'][str_entry[0]] = str_entry[1]
+                    elif hasattr(entry, 'Var'):
+                        for var_entry in entry.Var:
+                            if hasattr(var_entry, 'entry'):
+                                self.data['version_info'][var_entry.entry.keys()[0]] = var_entry.entry.values()[0]
+
+    def signature(self):
+        address = self.pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
+        size = self.pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].Size
+
+        if address == 0:
+            logging.debug('Error: source file not signed')
+            return
+
+        self.data['signature'] = { "data": base64.b64encode(self.pe.write()[address+8:]) }
+
+    def process_signature(self):
+        tmp = tempfile.NamedTemporaryFile()
+        tmp.write(self.artifact.data)
+        tmp.flush()
+        if "osslsigncode" in self.artifact.config:
+            if self.artifact.config.osslsigncode:
+                signchk_cmd = [self.artifact.config.osslsigncode, "verify", "-in", tmp.name]
+                p = subprocess.Popen(signchk_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,  close_fds=True)
+                output = p.communicate()
+                no_sig = re.findall(r'No signature found', output[0], re.S)
+                success = re.findall(r'(Signature verification: ok)', output[0], re.S)
+                print success
+                print output[0]
+                print no_sig
+                if len(no_sig) >0:
+                    self.data['signature']['present'] = False
+                    return
+                else:
+                    self.data['signature']['present'] = True
+
+
+                if success[0] != "":
+                    self.data['signature']['valid'] = True
+                else:
+                    self.data['signature']['valid'] = False
+                return
+
 
     def sections(self):
         sections = []
