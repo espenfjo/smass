@@ -1,4 +1,5 @@
 database=mongodb
 mongo_host=127.0.0.1
-modules=pe, virustotal
+modules=pe, virustotal, javascript
 virustotal_api_key=<apikey>
+# osslsigncode=/opt/ass/osslsigncode
