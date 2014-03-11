@@ -34,6 +34,14 @@
       <td>{{ module.is_dll }}</td>
     </tr>
     <tr>
+      <th>Packer</th>
+      <td>
+        {% for packer in module.packer %}
+        {{ packer|join:", " }}
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
       <th>Entry point</th>
       <td>{{ module.entrypoint }}</td>
     </tr>

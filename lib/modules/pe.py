@@ -5,6 +5,7 @@ import logging
 import magic
 import os
 import pefile
+import peutils
 import re
 import tempfile
 import subprocess
@@ -35,10 +36,19 @@ class pe(object):
         self.signature()
         self.get_version()
         self.process_signature()
+        self.check_packer()
         self.data['section_numbers'] = self.pe.FILE_HEADER.NumberOfSections
         self.data['entrypoint'] = hex(self.pe.OPTIONAL_HEADER.AddressOfEntryPoint)
         self.data['subsystem'] = pefile.SUBSYSTEM_TYPE[self.pe.OPTIONAL_HEADER.Subsystem]
         self.data['is_dll'] = self.pe.FILE_HEADER.IMAGE_FILE_DLL
+
+
+    def check_packer(self):
+        """ Check if the PE file is packed """
+        sig = peutils.SignatureDatabase("lib/modules/userdb.txt")
+        matches = sig.match_all(self.pe, ep_only = True)
+        if matches:
+            self.data['packer'] = matches
 
     def get_version(self):
         """ Determine the version info in a PE file """
@@ -66,6 +76,8 @@ class pe(object):
         self.data['signature'] = { "data": base64.b64encode(self.pe.write()[address+8:]) }
 
     def process_signature(self):
+        if not "signature" in self.data:
+            return
         tmp = tempfile.NamedTemporaryFile()
         tmp.write(self.artifact.data)
         tmp.flush()
@@ -76,9 +88,6 @@ class pe(object):
                 output = p.communicate()
                 no_sig = re.findall(r'No signature found', output[0], re.S)
                 success = re.findall(r'(Signature verification: ok)', output[0], re.S)
-                print success
-                print output[0]
-                print no_sig
                 if len(no_sig) >0:
                     self.data['signature']['present'] = False
                     return

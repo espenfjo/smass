@@ -47,6 +47,7 @@ class PE(models.Model):
     sub = ListField(EmbeddedModelField('PE_Sub'))
     version_info = DictField()
     signature = DictField()
+    packer = ListField()
 
 class PE_Sub(models.Model):
     name = models.TextField()

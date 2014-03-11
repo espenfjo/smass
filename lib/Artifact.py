@@ -29,7 +29,7 @@ class Artifact(object):
 
 
     def set_type(self):
-        if re.match("PE", str(self.magic.magic)):
+        if re.match("(PE|MS-DOS)", str(self.magic.magic)):
             self.type = "pe"
         elif re.match("(Node.js|javascript)", str(self.magic.magic)):
             self.type = "javascript"
