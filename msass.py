@@ -10,13 +10,13 @@ from lib.Artifact import Artifact
 
 
 def read_config():
-    configfile = "ass.conf"
+    configfile = "msass.conf"
     parser = argparse.ArgumentParser()
-    description='Arguments to start ASS'
+    description='Arguments to start MSASS'
 
     
     parser.add_argument('--configfile', type=str, nargs=1,
-                        help='ASS configuration file')
+                        help='MSASS configuration file')
     args, remaining_argv = parser.parse_known_args()
     parser.add_argument('--type', type=str, nargs=1,
                         help='Select type of file')

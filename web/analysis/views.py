@@ -18,7 +18,7 @@ from analysis.models import Analysis,PE,PE_Sub
 
 
 
-sys.path.append(settings.ASS_PATH)
+sys.path.append(settings.MSASS_PATH)
 from lib.Artifact import Artifact
 from lib.configreader import parse_config
 
@@ -171,7 +171,7 @@ def submit(request):
 
 
 def submit_file(stuff, post):
-    configfile = "{}/ass.conf".format(settings.ASS_PATH)
+    configfile = "{}/msass.conf".format(settings.MSASS_PATH)
     configobj = parse_config(configfile)
     data = stuff.read()
     name = stuff.name
