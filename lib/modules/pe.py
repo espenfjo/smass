@@ -45,10 +45,13 @@ class pe(object):
 
     def check_packer(self):
         """ Check if the PE file is packed """
-        sig = peutils.SignatureDatabase("lib/modules/userdb.txt")
-        matches = sig.match_all(self.pe, ep_only = True)
-        if matches:
-            self.data['packer'] = matches
+        try:
+            sig = peutils.SignatureDatabase("lib/modules/userdb.txt")
+            matches = sig.match_all(self.pe, ep_only = True)
+            if matches:
+                self.data['packer'] = matches
+        except Exception, e:
+            logging.error("Could not load PEID database: {}".format(e))
 
     def get_version(self):
         """ Determine the version info in a PE file """

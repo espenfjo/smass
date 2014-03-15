@@ -6,6 +6,6 @@ class mongodb(object):
         self.artifact = artifact
         self.config = artifact.config
         client = MongoClient(self.config.mongo_host)
-        db = client.msass
-        self.collection = db.msass
+        db = client.smass
+        self.collection = db.analysis
         self.fs = gridfs.GridFS(db)

@@ -22,7 +22,7 @@ class Analysis(models.Model):
 
     objects = MongoDBManager()
     class MongoMeta:
-        db_table="msass"
+        db_table="analysis"
 
 class Meta(models.Model):
     tags = ListField()

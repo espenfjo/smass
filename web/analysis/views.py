@@ -18,7 +18,7 @@ from analysis.models import Analysis,PE,PE_Sub
 
 
 
-sys.path.append(settings.MSASS_PATH)
+sys.path.append(settings.SMASS_PATH)
 from lib.Artifact import Artifact
 from lib.configreader import parse_config
 
@@ -171,7 +171,7 @@ def submit(request):
 
 
 def submit_file(stuff, post):
-    configfile = "{}/msass.conf".format(settings.MSASS_PATH)
+    configfile = "{}/smass.conf".format(settings.SMASS_PATH)
     configobj = parse_config(configfile)
     data = stuff.read()
     name = stuff.name
