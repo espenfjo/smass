@@ -1,4 +1,5 @@
-ass
+SMASS
 ===
 
-Artifact Storage Solution
+Static Malware Analysis Storage Solution
+
