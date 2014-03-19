@@ -20,6 +20,14 @@ def read_config():
     args, remaining_argv = parser.parse_known_args()
     parser.add_argument('--type', type=str, nargs=1,
                         help='Select type of file')
+    parser.add_argument('--source', type=str, nargs='?',
+                        help='Where the artifact was obtained')
+    parser.add_argument('--tags', type=str, nargs='*',
+                        help='Tags to describe the artifact')
+    parser.add_argument('--comment', type=str, nargs='?',
+                        help='Comment(s) describing the artifact')
+
+
     parser.add_argument("-v", "--verbose", help="increase output verbosity",
                     action="store_true")
     parser.add_argument("-d", "--debug", help="Debug output",
@@ -42,9 +50,6 @@ if config.debug:
     logging.basicConfig(level=logging.DEBUG)
 
 
-
-
-
 if not isfile(config.artifact):
     logging.critical("Artifact {} not found: no such file or directory".format(config.artifact))
     sys.exit(1)
@@ -64,13 +69,17 @@ except IOError, e:
 
 artifact = Artifact(config, name, size, data)
 artifact.analyse()
+
 if not hasattr(artifact, 'report'):
+    logging.critical("Analysis report not generated!")
     sys.exit(1)
 
-meta={
-    "source": "http://metasploit.com",
-    "tags": ["windows","exe","uac","malware", "metasploit"],
-    "comment": "Fetched from metasploit for use in blah blah blah. foudn to be doing whatever and also this and that to foobar." 
+
+
+meta = {
+    "source": config.source,
+    "tags": config.tags,
+    "comment": config.comment
 }
 artifact.report['meta'] = meta
 artifact.database.collection.insert(artifact.report)
