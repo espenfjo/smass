@@ -1,7 +1,7 @@
 import argparse
 import gridfs
 import sys
-
+import re
 from bson.objectid import ObjectId
 
 from django.conf import settings
