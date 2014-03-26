@@ -1,0 +1,23 @@
+{% extends "layouts/full.html" %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-3">
+    <div id="tag-cloud" style="width: 550px; height: 350px;"></div>
+  </div>
+</div>
+
+<div class="row">
+  {% with "search_bare.html" as template %}
+  {% include template %}
+  {% endwith %}
+</div>
+
+<script>
+  var word_array = [
+  {% for tag,weight in report.tags.items %}  
+     {text: "{{tag}}", weight: {{weight}}, link: "/analyses/search/?tag={{ tag }}"},
+  {% endfor %}
+  ];
+</script>
+{% endblock %}

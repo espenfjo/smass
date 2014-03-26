@@ -1,7 +1,7 @@
 {% extends "layouts/full.html" %}
 {% block content %}
 <div class="row">
-  <form role="form" class="form cf" action="/submit" method="post" enctype="multipart/form-data">
+  <form role="form" class="form cf" action="/submit/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <label for="file">File</label>
     <div class="input-group col-md-6">

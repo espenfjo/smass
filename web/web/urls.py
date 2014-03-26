@@ -3,5 +3,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'', include('analysis.urls'))
+                       url(r"^$", "dashboard.views.dashboard"),
+                       url(r"^analyses/", include('analysis.urls')),
+                       url(r"^submit/", include('submit.urls')),
 )

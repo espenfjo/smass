@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-tagsinput.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-editable.css' %}">
-    <link rel="stylesheet" href="{% static 'css/smass.css' %}">
-    
+    <link rel="stylesheet" href="{% static 'css/jqcloud.css' %}">
+    <link rel="stylesheet" href="{% static 'css/smass.css' %}">    
   </head>
   <body>
     <div class="navbar navbar-default navbar-fixed-top">
@@ -23,9 +23,10 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/">Analysis</a></li>
+              <li class="active"><a href="/">Dashboard</a></li>
+              <li><a href="/analyses">Analyses</a></li>
               <li><a href="/submit">Submit</a></li>
-              <li><a href="/search">Search</a></li>
+              <li><a href="/analyses/search">Search</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/about">About</a></li>
@@ -33,8 +34,10 @@
         </div><!--/.nav-collapse -->
       </div>
     </div>
-    <div class="container">      
-      {% block content %}{% endblock %}          
+    <div class="container-fluid">
+      <div class="col-md-10 col-md-offset-1">
+        {% block content %}{% endblock %}
+      </div>
     </div>
     <div id="footer">
       <div class="container">
@@ -43,7 +46,8 @@
         </p>
       </div>
     </div>
-    <script src="{% static 'js/jquery-1.9.1.js' %}"></script>
+    <script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
+    <script src="{% static 'js/jqcloud-1.0.4.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.file-input.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap-editable.min.js' %}"></script>

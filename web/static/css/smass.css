@@ -15,7 +15,7 @@ body {
     background-color: #f5f5f5;
 }
 
-body > .container {
+body > .container-fluid {
     padding: 80px 15px 0;
 }
 .container .text-muted {
@@ -88,10 +88,6 @@ input[readonly] {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-body > div.container > div > form.search {
-    width: 500px;
-}
-
 
 .right-caret {
     display: inline-block;
@@ -131,3 +127,10 @@ body > div.container > div > form.search {
     pointer-events:none;
     
 }
+.panel-box .panel-item {
+    display: table-cell;
+    padding: 30px;
+    width: 1%;
+    vertical-align: top;
+    border-radius: 0;
+    }

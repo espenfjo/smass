@@ -1,0 +1,80 @@
+<form class="form search" role="form" action="/analyses/search" enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  <div class="input-group col-md-8 col-md-offset-2">
+    <p class="text-muted" style="margin-top: 5px;">
+      For details on how to perform searches, get some <a href="#help" data-toggle="collapse" class="collapsed">help</a>.
+    </p>
+  </div>
+  <div class="input-group col-md-6 col-md-offset-2">
+  <span class="input-group-btn">
+      <input type="text" class="form-control" id="search" name="search" placeholder="Search term">
+      <button class="btn btn-primary ">Search</button>
+    </span>
+  </div>
+  {% if error %}
+  <div class="error">
+    <h5>{{error}}</h5>
+  </div>
+  {% endif %}
+
+</form>
+<div id="help" class="collapse" style="height: 0px;">
+  <p class="text-muted" style="margin-top: 10px;">For MD5, SHA1, SHA256 and SHA512 no prefix is needed.</p>
+  <table class="table table-striped table-centered">
+    <thead>
+      <tr>
+        <th>Prefix</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>name:</code></td>
+        <td>File name pattern</td>
+      </tr>
+      <tr>
+        <td><code>type:</code></td>
+        <td>File type/format</td>
+      </tr>
+      <tr>
+        <td><code>tag:</code></td>
+        <td>Tags</td>
+      </tr>
+      <tr>
+        <td><code>source:</code></td>
+        <td>Source</td>
+      </tr>
+      <tr>
+        <td><code>comment:</code></td>
+        <td>Comments</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{% if analyses %}
+<table class="table table-striped table-centered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Analysis date</th>
+      <th>MD5</th>
+      <th>Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in analyses %}
+    <tr>
+      <td><a href="/analyses/{{record.id}}">{{record.name}}</a></td>
+      <td>{{record.analysis_date}}</td>
+      <td>{{record.md5}}</td>
+      <td>
+        {% for tag in record.meta.tags %}
+        <span class="label label-primary">{{ tag }}</span>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}

@@ -21,6 +21,8 @@ $(document).ready(function() {
     setupListeners();
     setup_editables();
 
+    $("#tag-cloud").jQCloud(word_array);
+
 });
 function setup_editables(){
     $.fn.editable.defaults.url = window.location.pathname;
